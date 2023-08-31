@@ -1,0 +1,442 @@
+{
+    "metadata": {
+        "filePath": "samples/aceyducey.bas",
+        "type": "bas",
+        "size": 0.0020246505737304688,
+        "linesOfCode": 80,
+        "documentationPercentage": 20.0,
+        "hashFull": "0b6d4f37ca4d6fb7725ea76bf5879b447671babe5823070c222bf21d39ae8bc7",
+        "hashTruncated": "0b6d4f37ca4d6fb7",
+        "total_lines": 100,
+        "total_chunks": 20,
+        "average_chunk_size": 5.0,
+        "total_variables": 233,
+        "versions": "Microsoft Basic 4.0, Commodore PET basic"
+    },
+    "chunks": [
+        {
+            "content": [
+                "10 PRINT TAB(26);\"ACEY DUCEY CARD GAME\"",
+                "20 PRINT TAB(15);\"CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\"",
+                "21 PRINT",
+                "22 PRINT",
+                "30 PRINT\"ACEY-DUCEY IS PLAYED IN THE FOLLOWING MANNER \"",
+                "40 PRINT\"THE DEALER (COMPUTER) DEALS TWO CARDS FACE UP\"",
+                "50 PRINT\"YOU HAVE AN OPTION TO BET OR NOT BET DEPENDING\"",
+                "60 PRINT\"ON WHETHER OR NOT YOU FEEL THE CARD WILL HAVE\"",
+                "70 PRINT\"A VALUE BETWEEN THE FIRST TWO.\"",
+                "80 PRINT\"IF YOU DO NOT WANT TO BET, INPUT A 0\"",
+                "100 N=100",
+                "110 Q=100",
+                "120 PRINT \"YOU NOW HAVE \";Q;\" DOLLARS.\"",
+                "130 PRINT",
+                "140 GOTO 260"
+            ],
+            "start_line": "1",
+            "end_line": "140",
+            "hash": "79d0fe0793f1816c9988e045136bb6d48fb9639a7f8dc728e54d0c72b4b347be",
+            "hashTruncated": "79d0fe0793f1816c",
+            "line_count": 15,
+            "references": {
+                "goto": {
+                    "260": {
+                        "chunk_index": "Chunk 4",
+                        "hashTruncated": "b768ddc1ff637e10"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "210 Q=Q+M",
+                "220 GOTO 120"
+            ],
+            "start_line": "16",
+            "end_line": "220",
+            "hash": "479fbf613f86459e175eaa5d7631a94f7de89f1373962ad83cdd82fa0300c26d",
+            "hashTruncated": "479fbf613f86459e",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "120": {
+                        "chunk_index": "Chunk 1",
+                        "hashTruncated": "79d0fe0793f1816c"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "240 Q=Q-M",
+                "250 GOTO 120"
+            ],
+            "start_line": "18",
+            "end_line": "250",
+            "hash": "a37164b3c6ea0c812dc1f83be95a9bd7d1e4dbcfb6932f20cb4b198046898a63",
+            "hashTruncated": "a37164b3c6ea0c81",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "120": {
+                        "chunk_index": "Chunk 1",
+                        "hashTruncated": "79d0fe0793f1816c"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "260 PRINT\"HERE ARE YOUR NEXT TWO CARDS: \"",
+                "270 A=INT(14*RND(1))+2",
+                "280 IF A<2 THEN 270",
+                "290 IF A>14 THEN 270",
+                "300 B=INT(14*RND(1))+2",
+                "310 IF B<2 THEN 300",
+                "320 IF B>14 THEN 300",
+                "330 IF A>=B THEN 270",
+                "350 IF A<11 THEN 400",
+                "360 IF A=11 THEN 420",
+                "370 IF A=12 THEN 440",
+                "380 IF A=13 THEN 460",
+                "390 IF A=14 THEN 480",
+                "400 PRINT A",
+                "410 GOTO 500"
+            ],
+            "start_line": "20",
+            "end_line": "410",
+            "hash": "b768ddc1ff637e10a4454163925ab89cffb65169d21c323d9fdc6e65ad9422cf",
+            "hashTruncated": "b768ddc1ff637e10",
+            "line_count": 15,
+            "references": {
+                "goto": {
+                    "500": {
+                        "chunk_index": "Chunk 9",
+                        "hashTruncated": "397a16bdd174ca03"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "420 PRINT\"JACK\"",
+                "430 GOTO 500"
+            ],
+            "start_line": "35",
+            "end_line": "430",
+            "hash": "f46b6ab9a3a2d560ea4cac0d9814b04add19f16c0e8221a87355e06a0db35912",
+            "hashTruncated": "f46b6ab9a3a2d560",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "500": {
+                        "chunk_index": "Chunk 9",
+                        "hashTruncated": "397a16bdd174ca03"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "440 PRINT\"QUEEN\"",
+                "450 GOTO 500"
+            ],
+            "start_line": "37",
+            "end_line": "450",
+            "hash": "a91a1dac6e937e218396f17f3834785b73f2bbbe5a4fc0e57b15eefd6597a049",
+            "hashTruncated": "a91a1dac6e937e21",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "500": {
+                        "chunk_index": "Chunk 9",
+                        "hashTruncated": "397a16bdd174ca03"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "460 PRINT\"KING\"",
+                "470 GOTO 500"
+            ],
+            "start_line": "39",
+            "end_line": "470",
+            "hash": "23d8d0e42b7223c753deb3b7bc8531a014ef8ea2562c7d2c5373afa7953dd22e",
+            "hashTruncated": "23d8d0e42b7223c7",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "500": {
+                        "chunk_index": "Chunk 9",
+                        "hashTruncated": "397a16bdd174ca03"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "480 PRINT\"ACE\"",
+                "500 IF B<11 THEN 550",
+                "510 IF B=11 THEN 570",
+                "520 IF B=12 THEN 590",
+                "530 IF B=13 THEN 610",
+                "540 IF B=14 THEN 630",
+                "550 PRINT B",
+                "560 GOTO 650"
+            ],
+            "start_line": "41",
+            "end_line": "560",
+            "hash": "38837e87d586da5df5bef8914bdc528cbfd3b3147eb5704166b7c0e14ac2f1ec",
+            "hashTruncated": "38837e87d586da5d",
+            "line_count": 8,
+            "references": {
+                "goto": {
+                    "650": {
+                        "chunk_index": "Chunk 13",
+                        "hashTruncated": "8b3e1133e337713b"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "570 PRINT\"JACK\"",
+                "580 GOTO 650"
+            ],
+            "start_line": "49",
+            "end_line": "580",
+            "hash": "397a16bdd174ca0309e702959f7ec886707693fe38e3eb257e63aa2f1345612e",
+            "hashTruncated": "397a16bdd174ca03",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "650": {
+                        "chunk_index": "Chunk 13",
+                        "hashTruncated": "8b3e1133e337713b"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "590 PRINT\"QUEEN\"",
+                "600 GOTO 650"
+            ],
+            "start_line": "51",
+            "end_line": "600",
+            "hash": "fa13b8d7902e51c2c90d1a82f3d3c4b2d050dcf996f335705d96f5f9bbf036ed",
+            "hashTruncated": "fa13b8d7902e51c2",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "650": {
+                        "chunk_index": "Chunk 13",
+                        "hashTruncated": "8b3e1133e337713b"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "610 PRINT\"KING\"",
+                "620 GOTO 650"
+            ],
+            "start_line": "53",
+            "end_line": "620",
+            "hash": "a8cbd22019e6e10ca60065f49dee155e5100692fdf1b912e44b8efd808c570e6",
+            "hashTruncated": "a8cbd22019e6e10c",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "650": {
+                        "chunk_index": "Chunk 13",
+                        "hashTruncated": "8b3e1133e337713b"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "630 PRINT\"ACE\"",
+                "640 PRINT",
+                "650 PRINT",
+                "660 INPUT\"WHAT IS YOUR BET\";M",
+                "670 IF M<>0 THEN 680",
+                "675 PRINT\"CHICKEN!!\"",
+                "676 PRINT",
+                "677 GOTO 260"
+            ],
+            "start_line": "55",
+            "end_line": "677",
+            "hash": "6c90565adbfa2a02353ef9498a747dd93130e82f65d317db30d0e9b638ac02c0",
+            "hashTruncated": "6c90565adbfa2a02",
+            "line_count": 8,
+            "references": {
+                "goto": {
+                    "260": {
+                        "chunk_index": "Chunk 4",
+                        "hashTruncated": "b768ddc1ff637e10"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "680 IF M<=Q THEN 730",
+                "690 PRINT\"SORRY, MY FRIEND, BUT YOU BET TOO MUCH.\"",
+                "700 PRINT\"YOU HAVE ONLY \";Q;\" DOLLARS TO BET.\"",
+                "710 GOTO 650"
+            ],
+            "start_line": "63",
+            "end_line": "710",
+            "hash": "8b3e1133e337713bbe628c1e800aea12d5e510af4fff00603ee399e034068415",
+            "hashTruncated": "8b3e1133e337713b",
+            "line_count": 4,
+            "references": {
+                "goto": {
+                    "650": {
+                        "chunk_index": "Chunk 13",
+                        "hashTruncated": "8b3e1133e337713b"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "730 C=INT(14*RND(1))+2",
+                "740 IF C<2 THEN 730",
+                "750 IF C>14 THEN 730",
+                "760 IF C<11 THEN 810",
+                "770 IF C=11 THEN 830",
+                "780 IF C=12 THEN 850",
+                "790 IF C=13 THEN 870",
+                "800 IF C=14 THEN 890",
+                "810 PRINT C",
+                "820 GOTO 910"
+            ],
+            "start_line": "67",
+            "end_line": "820",
+            "hash": "586bd80f94c65cacf0e81c749e123ffb040d650d11c5d140e57c59cb09466bf5",
+            "hashTruncated": "586bd80f94c65cac",
+            "line_count": 10,
+            "references": {
+                "goto": {
+                    "910": {
+                        "chunk_index": "Chunk 19",
+                        "hashTruncated": "e7e9f7d3768ca1c5"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "830 PRINT\"JACK\"",
+                "840 GOTO 910"
+            ],
+            "start_line": "77",
+            "end_line": "840",
+            "hash": "19470a245fc012f8d9c88c25481741cf9f4d1685daeba3147e580434c39aaaae",
+            "hashTruncated": "19470a245fc012f8",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "910": {
+                        "chunk_index": "Chunk 19",
+                        "hashTruncated": "e7e9f7d3768ca1c5"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "850 PRINT\"QUEEN\"",
+                "860 GOTO 910"
+            ],
+            "start_line": "79",
+            "end_line": "860",
+            "hash": "b20eb28c8815b5d6cd40d492b889d78ead2fd1e743e6aec15f87b06baec441ff",
+            "hashTruncated": "b20eb28c8815b5d6",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "910": {
+                        "chunk_index": "Chunk 19",
+                        "hashTruncated": "e7e9f7d3768ca1c5"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "870 PRINT\"KING\"",
+                "880 GOTO 910"
+            ],
+            "start_line": "81",
+            "end_line": "880",
+            "hash": "4851b6f0c83c8e70df7a54763605515a8f28404dd3c11238050c303dec72a5d7",
+            "hashTruncated": "4851b6f0c83c8e70",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "910": {
+                        "chunk_index": "Chunk 19",
+                        "hashTruncated": "e7e9f7d3768ca1c5"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "890 PRINT \"ACE\"",
+                "900 PRINT",
+                "910 IF C>A THEN 930",
+                "920 GOTO 970"
+            ],
+            "start_line": "83",
+            "end_line": "920",
+            "hash": "b2eb0cda2e67f15788ccb2c68a80c84d942d15fddbc7df81be6190456149223a",
+            "hashTruncated": "b2eb0cda2e67f157",
+            "line_count": 4
+        },
+        {
+            "content": [
+                "930 IF C>=B THEN 970",
+                "950 PRINT\"YOU WIN!!!\"",
+                "960 GOTO 210"
+            ],
+            "start_line": "87",
+            "end_line": "960",
+            "hash": "e7e9f7d3768ca1c5d9a12dd3271718370acb4dfc4e3e5d07bc0621f015d6728e",
+            "hashTruncated": "e7e9f7d3768ca1c5",
+            "line_count": 3,
+            "references": {
+                "goto": {
+                    "210": {
+                        "chunk_index": "Chunk 4",
+                        "hashTruncated": "b768ddc1ff637e10"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "970 PRINT\"SORRY, YOU LOSE\"",
+                "980 IF M<Q THEN 240",
+                "990 PRINT",
+                "1000 PRINT",
+                "1010 PRINT\"SORRY, FRIEND, BUT YOU BLEW YOUR WAD.\"",
+                "1015 PRINT:PRINT",
+                "1020 INPUT\"TRY AGAIN (YES OR NO)\";A$",
+                "1025 PRINT:PRINT",
+                "1030 IF A$=\"YES\" THEN 110",
+                "1040 PRINT\"O.K., HOPE YOU HAD FUN!\"",
+                "1050 END"
+            ],
+            "start_line": "90",
+            "end_line": "1050",
+            "hash": "90d2063507a89cc3923166d359474717dc5bc076f8346cf0c76a55da3509aa42",
+            "hashTruncated": "90d2063507a89cc3",
+            "line_count": 11
+        }
+    ]
+}

@@ -1,0 +1,949 @@
+{
+    "metadata": {
+        "filePath": "samples/basketball.bas",
+        "type": "bas",
+        "size": 0.0049800872802734375,
+        "linesOfCode": 152,
+        "documentationPercentage": 22.448979591836736,
+        "hashFull": "ffd41c02e403a72f1c83e415d434c88448afd49466cd4461e7c390aba40d0650",
+        "hashTruncated": "ffd41c02e403a72f",
+        "total_lines": 196,
+        "total_chunks": 43,
+        "average_chunk_size": 4.558139534883721,
+        "total_variables": 430,
+        "versions": "Microsoft Basic 4.0, Commodore PET basic"
+    },
+    "chunks": [
+        {
+            "content": [
+                "5 PRINT TAB(31);\"BASKETBALL\"",
+                "7 PRINT TAB(15);\"CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\"",
+                "8 PRINT:PRINT:PRINT",
+                "10 PRINT \"THIS IS DARTMOUTH COLLEGE BASKETBALL.  YOU WILL BE DARTMOUTH\"",
+                "20 PRINT \" CAPTAIN AND PLAYMAKER.  CALL SHOTS AS FOLLOWS:  1. LONG\"",
+                "30 PRINT \" (30 FT.) JUMP SHOT; 2. SHORT (15 FT.) JUMP SHOT; 3. LAY\"",
+                "40 PRINT \" UP; 4. SET SHOT.\"",
+                "60 PRINT \"BOTH TEAMS WILL USE THE SAME DEFENSE.  CALL DEFENSE AS\"",
+                "70 PRINT \"FOLLOWS:  6. PRESS; 6.5 MAN-TO MAN; 7. ZONE; 7.5 NONE.\"",
+                "72 PRINT \"TO CHANGE DEFENSE, JUST TYPE 0 AS YOUR NEXT SHOT.\"",
+                "76 INPUT \"YOUR STARTING DEFENSE WILL BE\";D:IF D<6 THEN 2010",
+                "79 PRINT",
+                "80 INPUT \"CHOOSE YOUR OPPONENT\";O$",
+                "370 PRINT \"CENTER JUMP\"",
+                "390 IF RND(1)> 3/5 THEN 420",
+                "400 PRINT O$;\" CONTROLS THE TAP.\"",
+                "410 GOTO 3000"
+            ],
+            "start_line": "1",
+            "end_line": "410",
+            "hash": "16d440d22e7277eedf310cd6724b887d051f9d0824fe3b002234082cef6eb56f",
+            "hashTruncated": "16d440d22e7277ee",
+            "line_count": 17,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "420 PRINT \"DARTMOUTH CONTROLS THE TAP.\"",
+                "425 PRINT",
+                "430 INPUT \"YOUR SHOT\";Z",
+                "440 P=0",
+                "445 IF Z<>INT(Z) THEN 455",
+                "446 IF Z<0 OR Z>4 THEN 455",
+                "447 GOTO 460"
+            ],
+            "start_line": "18",
+            "end_line": "447",
+            "hash": "78f6aeb6647cf461f1779569d204787d006139e9a27f28f776a799e6334fa951",
+            "hashTruncated": "78f6aeb6647cf461",
+            "line_count": 7,
+            "references": {
+                "goto": {
+                    "460": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "455 PRINT \"INCORRECT ANSWER.  RETYPE IT. \";:GOTO 430",
+                "460 IF RND(1)<.5 THEN 1000",
+                "480 IF T<100 THEN 1000",
+                "490 PRINT",
+                "491 IF S(1)<>S(0) THEN 510",
+                "492 PRINT:PRINT \"   ***** END OF SECOND HALF *****\":PRINT",
+                "493 PRINT \"SCORE AT END OF REGULATION TIME:\"",
+                "494 PRINT \"        DARTMOUTH:\";S(1);\"  \";O$;\":\";S(0)",
+                "495 PRINT",
+                "496 PRINT \"BEGIN TWO MINUTE OVERTIME PERIOD\"",
+                "499 T=93",
+                "500 GOTO 370"
+            ],
+            "start_line": "25",
+            "end_line": "500",
+            "hash": "7e79ca544aa8decb43d8cc4f47e2a290b34c3580d2b337c53857d08d3e3336cf",
+            "hashTruncated": "7e79ca544aa8decb",
+            "line_count": 12,
+            "references": {
+                "goto": {
+                    "430": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    },
+                    "370": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "510 PRINT \"   ***** END OF GAME *****\"",
+                "515 PRINT \"FINAL SCORE: DARTMOUTH:\";S(1);\"  \";O$;\":\";S(0)",
+                "520 STOP",
+                "600 PRINT",
+                "610 PRINT \"   *** TWO MINUTES LEFT IN THE GAME ***\"",
+                "620 PRINT",
+                "630 RETURN",
+                "1000 ON Z GOTO 1040,1040",
+                "1030 GOTO 1300"
+            ],
+            "start_line": "37",
+            "end_line": "1030",
+            "hash": "470e446d41ea26c8151cde8046aa0c6150c2c95239080d5a48c3e4b597c57951",
+            "hashTruncated": "470e446d41ea26c8",
+            "line_count": 9,
+            "references": {
+                "goto": {
+                    "1040,1040": {
+                        "chunk_index": "Chunk 20",
+                        "hashTruncated": "7e5b74a787d97214"
+                    },
+                    "1300": {
+                        "chunk_index": "Chunk 28",
+                        "hashTruncated": "7ad2b5361bc966b5"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1040 T=T+1",
+                "1041 IF T=50 THEN 8000",
+                "1042 IF T=92 THEN 1046",
+                "1043 GOTO 1050"
+            ],
+            "start_line": "46",
+            "end_line": "1043",
+            "hash": "ca3b5f61bff5a4084b2cf439ed675659b4e9c9bb218d7ac4acc702d528e20c5a",
+            "hashTruncated": "ca3b5f61bff5a408",
+            "line_count": 4,
+            "references": {
+                "goto": {
+                    "1050": {
+                        "chunk_index": "Chunk 20",
+                        "hashTruncated": "7e5b74a787d97214"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1046 GOSUB 600",
+                "1050 PRINT \"JUMP SHOT\"",
+                "1060 IF RND(1)>.341*D/8 THEN 1090",
+                "1070 PRINT \"SHOT IS GOOD.\"",
+                "1075 GOSUB 7000",
+                "1085 GOTO 3000"
+            ],
+            "start_line": "50",
+            "end_line": "1085",
+            "hash": "665a972b3834f0359542291f9434f434b6eb6a19c5e12bc55545cd351aca12b3",
+            "hashTruncated": "665a972b3834f035",
+            "line_count": 6,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1090 IF RND(1)>.682*D/8 THEN 1200",
+                "1100 PRINT \"SHOT IS OFF TARGET.\"",
+                "1105 IF D/6*RND(1)>.45 THEN 1130",
+                "1110 PRINT \"DARTMOUTH CONTROLS THE REBOUND.\"",
+                "1120 GOTO 1145"
+            ],
+            "start_line": "56",
+            "end_line": "1120",
+            "hash": "004f1585123df1337ba4981a511c755449d8acd90b16cb5788df3a64dc3bf67d",
+            "hashTruncated": "004f1585123df133",
+            "line_count": 5,
+            "references": {
+                "goto": {
+                    "1145": {
+                        "chunk_index": "Chunk 23",
+                        "hashTruncated": "353a91ba01bfc15d"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1130 PRINT \"REBOUND TO \";O$",
+                "1140 GOTO 3000"
+            ],
+            "start_line": "61",
+            "end_line": "1140",
+            "hash": "c86d1b5da203ab4cf66a71a8791c154420d23a831bdc0a5fd432beee83963b22",
+            "hashTruncated": "c86d1b5da203ab4c",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1145 IF RND(1)>.4 THEN 1158",
+                "1150 GOTO 1300"
+            ],
+            "start_line": "63",
+            "end_line": "1150",
+            "hash": "e95c2ffb65586e6849ec2d0a9b756046b2d8d0f2ac15642085b7046698a1abf4",
+            "hashTruncated": "e95c2ffb65586e68",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "1300": {
+                        "chunk_index": "Chunk 28",
+                        "hashTruncated": "7ad2b5361bc966b5"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1158 IF D=6 THEN 5100",
+                "1160 PRINT \"BALL PASSED BACK TO YOU. \";",
+                "1170 GOTO 430"
+            ],
+            "start_line": "65",
+            "end_line": "1170",
+            "hash": "ae9bfc25f8c9ce487c858bcb862c51125b0c0941dbca78c17f1f011b17e088a8",
+            "hashTruncated": "ae9bfc25f8c9ce48",
+            "line_count": 3,
+            "references": {
+                "goto": {
+                    "430": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1180 IF RND(1)>.9 THEN 1190",
+                "1185 PRINT \"PLAYER FOULED, TWO SHOTS.\"",
+                "1187 GOSUB 4000",
+                "1188 GOTO 3000"
+            ],
+            "start_line": "68",
+            "end_line": "1188",
+            "hash": "b03e6629dee444dc9930d8e446eb230fae689d0fb8e42708ad99fbc95f1805fe",
+            "hashTruncated": "b03e6629dee444dc",
+            "line_count": 4,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1190 PRINT \"BALL STOLEN. \";O$;\"'S BALL.\"",
+                "1195 GOTO 3000"
+            ],
+            "start_line": "72",
+            "end_line": "1195",
+            "hash": "ecb633332e171c758150fb30be76c4b8ffb964e6a6759cdca210a32025854298",
+            "hashTruncated": "ecb633332e171c75",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1200 IF RND(1)>.782*D/8 THEN 1250",
+                "1210 PRINT \"SHOT IS BLOCKED.  BALL CONTROLLED BY \";",
+                "1230 IF RND(1)>.5 THEN 1242",
+                "1235 PRINT \"DARTMOUTH.\"",
+                "1240 GOTO 430"
+            ],
+            "start_line": "74",
+            "end_line": "1240",
+            "hash": "fc1c1c40df14570affe1af0c8754a3213af7b5fc527638523cc3b000ecaad791",
+            "hashTruncated": "fc1c1c40df14570a",
+            "line_count": 5,
+            "references": {
+                "goto": {
+                    "430": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1242 PRINT O$;\".\"",
+                "1245 GOTO 3000"
+            ],
+            "start_line": "79",
+            "end_line": "1245",
+            "hash": "82c58f1a09dbe3a2b45cdd3dfa46c137b5a19256ab7aa203c63844672cb56a43",
+            "hashTruncated": "82c58f1a09dbe3a2",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1250 IF RND(1)>.843*D/8 THEN 1270",
+                "1255 PRINT \"SHOOTER IS FOULED.  TWO SHOTS.\"",
+                "1260 GOSUB 4000",
+                "1265 GOTO 3000"
+            ],
+            "start_line": "81",
+            "end_line": "1265",
+            "hash": "5ba49d4c4cc1ff9965a9f97bbbb963a4a79507d30ebf77ea2399a83c76733f77",
+            "hashTruncated": "5ba49d4c4cc1ff99",
+            "line_count": 4,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1270 PRINT \"CHARGING FOUL.  DARTMOUTH LOSES BALL.\"",
+                "1280 GOTO 3000"
+            ],
+            "start_line": "85",
+            "end_line": "1280",
+            "hash": "eee21f688d6f91db73172131423665942b905f62e359cb34486d69208bc94253",
+            "hashTruncated": "eee21f688d6f91db",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1300 T=T+1",
+                "1301 IF T=50 THEN 8000",
+                "1302 IF T=92 THEN 1304",
+                "1303 GOTO 1305"
+            ],
+            "start_line": "87",
+            "end_line": "1303",
+            "hash": "b44b5477a0c1640db3d5ff602a270f9401025f8f79002ead78558cbaaa4cde0d",
+            "hashTruncated": "b44b5477a0c1640d",
+            "line_count": 4,
+            "references": {
+                "goto": {
+                    "1305": {
+                        "chunk_index": "Chunk 28",
+                        "hashTruncated": "7ad2b5361bc966b5"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1304 GOSUB 600",
+                "1305 IF Z=0 THEN 2010",
+                "1310 IF Z>3 THEN 1700",
+                "1320 PRINT \"LAY UP.\"",
+                "1330 IF 7/D*RND(1)>.4 THEN 1360",
+                "1340 PRINT \"SHOT IS GOOD.  TWO POINTS.\"",
+                "1345 GOSUB 7000",
+                "1355 GOTO 3000"
+            ],
+            "start_line": "91",
+            "end_line": "1355",
+            "hash": "76c713c36dab2bd0cdabb6f2ba7d7ecd880ec00917f82c8ef684e75e55032758",
+            "hashTruncated": "76c713c36dab2bd0",
+            "line_count": 8,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1360 IF 7/D*RND(1)>.7 THEN 1500",
+                "1370 PRINT \"SHOT IS OFF THE RIM.\"",
+                "1380 IF RND(1)>2/3 THEN 1415",
+                "1390 PRINT O$;\" CONTROLS THE REBOUND.\"",
+                "1400 GOTO 3000"
+            ],
+            "start_line": "99",
+            "end_line": "1400",
+            "hash": "5f1682d8507e00de8bc570c2ca888fc801d6dab4519a5009fd4697bf8d428913",
+            "hashTruncated": "5f1682d8507e00de",
+            "line_count": 5,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1415 PRINT \"DARTMOUTH CONTROLS THE REBOUND.\"",
+                "1420 IF RND(1)>.4 THEN 1440",
+                "1430 GOTO 1300"
+            ],
+            "start_line": "104",
+            "end_line": "1430",
+            "hash": "7e5b74a787d9721433113ffca233da55c1b0d4ec5d731f584ec2ba24fbd8fd18",
+            "hashTruncated": "7e5b74a787d97214",
+            "line_count": 3,
+            "references": {
+                "goto": {
+                    "1300": {
+                        "chunk_index": "Chunk 28",
+                        "hashTruncated": "7ad2b5361bc966b5"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1440 PRINT \"BALL PASSED BACK TO YOU.\";",
+                "1450 GOTO 430"
+            ],
+            "start_line": "107",
+            "end_line": "1450",
+            "hash": "f0ff862f7c4a662ba802ca5242ce6d2e556363dacd2a4b7c903b752a96b248bb",
+            "hashTruncated": "f0ff862f7c4a662b",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "430": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1500 IF 7/D*RND(1)>.875 THEN 1600",
+                "1510 PRINT \"SHOOTER FOULED.  TWO SHOTS.\"",
+                "1520 GOSUB 4000",
+                "1530 GOTO 3000"
+            ],
+            "start_line": "109",
+            "end_line": "1530",
+            "hash": "989d9046f92566b849889ab28a610142ce0030d04a5f35b0129e994bff54a6eb",
+            "hashTruncated": "989d9046f92566b8",
+            "line_count": 4,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1600 IF 7/D*RND(1)>.925 THEN 1630",
+                "1610 PRINT \"SHOT BLOCKED. \";O$;\"'S BALL.\"",
+                "1620 GOTO 3000"
+            ],
+            "start_line": "113",
+            "end_line": "1620",
+            "hash": "353a91ba01bfc15dc0a6c34ba79276b46962ae2d64a01430d0050c9a8eb7f65a",
+            "hashTruncated": "353a91ba01bfc15d",
+            "line_count": 3,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1630 PRINT \"CHARGING FOUL.  DARTMOUTH LOSES THE BALL.\"",
+                "1640 GOTO 3000"
+            ],
+            "start_line": "116",
+            "end_line": "1640",
+            "hash": "ddc86a8aa0e6b9a9cad025c111080b09643f7cb89ac74298a125a59d161feb6a",
+            "hashTruncated": "ddc86a8aa0e6b9a9",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "1700 PRINT \"SET SHOT.\"",
+                "1710 GOTO 1330"
+            ],
+            "start_line": "118",
+            "end_line": "1710",
+            "hash": "5fe82a29239c5ca05d2bfafb685c1946e46ae8721ef4980ffd538e1d63dc48cd",
+            "hashTruncated": "5fe82a29239c5ca0",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "1330": {
+                        "chunk_index": "Chunk 28",
+                        "hashTruncated": "7ad2b5361bc966b5"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "2010 INPUT \"YOUR NEW DEFENSIVE ALLIGNMENT IS\";D",
+                "2030 IF D<6 THEN 2010",
+                "2040 GOTO 425"
+            ],
+            "start_line": "120",
+            "end_line": "2040",
+            "hash": "fbbf413d51712b92080f04d970306b24c9ec4c9f6ac203dfc1ec58c0eed03ea9",
+            "hashTruncated": "fbbf413d51712b92",
+            "line_count": 3,
+            "references": {
+                "goto": {
+                    "425": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "3000 P=1",
+                "3005 T=T+1",
+                "3008 IF T=50 THEN 8000",
+                "3012 GOTO 3018"
+            ],
+            "start_line": "123",
+            "end_line": "3012",
+            "hash": "b9ca18913140001ed65ae73acc42e601f9ea710788b0b3b34c08437e7cace023",
+            "hashTruncated": "b9ca18913140001e",
+            "line_count": 4,
+            "references": {
+                "goto": {
+                    "3018": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "3015 GOSUB 600",
+                "3018 PRINT",
+                "3020 Z1=10/4*RND(1)+1",
+                "3030 IF Z1>2 THEN 3500",
+                "3040 PRINT \"JUMP SHOT.\"",
+                "3050 IF 8/D*RND(1)>.35 THEN 3100",
+                "3060 PRINT \"SHOT IS GOOD.\"",
+                "3080 GOSUB 6000",
+                "3090 GOTO 425"
+            ],
+            "start_line": "127",
+            "end_line": "3090",
+            "hash": "7ad2b5361bc966b5408b147a31c48daa75103984b85387a5899be6a46e74a95a",
+            "hashTruncated": "7ad2b5361bc966b5",
+            "line_count": 9,
+            "references": {
+                "goto": {
+                    "425": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "3100 IF 8/D*RND(1)>.75 THEN 3200",
+                "3105 PRINT \"SHOT IS OFF RIM.\"",
+                "3110 IF D/6*RND(1)>.5 THEN 3150",
+                "3120 PRINT \"DARTMOUTH CONTROLS THE REBOUND.\"",
+                "3130 GOTO 425"
+            ],
+            "start_line": "136",
+            "end_line": "3130",
+            "hash": "9c3b8a9176c3ecbc8eee5902e4c0608ece49ff490964bf035904f03ce796f5d4",
+            "hashTruncated": "9c3b8a9176c3ecbc",
+            "line_count": 5,
+            "references": {
+                "goto": {
+                    "425": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "3150 PRINT O$;\" CONTROLS THE REBOUND.\"",
+                "3160 IF D=6 THEN 5000",
+                "3165 IF RND(1)>.5 THEN 3175",
+                "3168 PRINT \"PASS BACK TO \";O$;\" GUARD.\"",
+                "3170 GOTO 3000"
+            ],
+            "start_line": "141",
+            "end_line": "3170",
+            "hash": "27314d6946e73e7b85b62cb9673ef60b16e562b420a2674660f24e0839f595cd",
+            "hashTruncated": "27314d6946e73e7b",
+            "line_count": 5,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "3175 GOTO 3500",
+                "3200 IF 8/D*RND(1)>.9 THEN 3310",
+                "3210 PRINT \"PLAYER FOULED.  TWO SHOTS.\"",
+                "3220 GOSUB 4000",
+                "3230 GOTO 425"
+            ],
+            "start_line": "146",
+            "end_line": "3230",
+            "hash": "95a03260dca6bdd1c289d81cf42956d73179b0ffb83b4c9a5c0fafc8a9f06557",
+            "hashTruncated": "95a03260dca6bdd1",
+            "line_count": 5,
+            "references": {
+                "goto": {
+                    "3500": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    },
+                    "425": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "3310 PRINT \"OFFENSIVE FOUL.  DARTMOUTH'S BALL.\"",
+                "3320 GOTO 425"
+            ],
+            "start_line": "151",
+            "end_line": "3320",
+            "hash": "78721c754725c2fbbfbe210d91591f336057435d2b0da6bad42eeed524b82e19",
+            "hashTruncated": "78721c754725c2fb",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "425": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "3500 IF Z1>3 THEN 3800",
+                "3510 PRINT \"LAY UP.\"",
+                "3520 IF 7/D*RND(1)>.413 THEN 3600",
+                "3530 PRINT \"SHOT IS GOOD.\"",
+                "3540 GOSUB 6000",
+                "3550 GOTO 425"
+            ],
+            "start_line": "153",
+            "end_line": "3550",
+            "hash": "ffedf481fef56d66a348f0b472981c75018fd4de2555e359c0f82423fd16ca33",
+            "hashTruncated": "ffedf481fef56d66",
+            "line_count": 6,
+            "references": {
+                "goto": {
+                    "425": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "3600 PRINT \"SHOT IS MISSED.\"",
+                "3610 GOTO 3110"
+            ],
+            "start_line": "159",
+            "end_line": "3610",
+            "hash": "49b5f5b6355629790ecba94cf83faac7b568dda45d7e3b36dd516a813aebc873",
+            "hashTruncated": "49b5f5b635562979",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "3110": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "3800 PRINT \"SET SHOT.\"",
+                "3810 GOTO 3520"
+            ],
+            "start_line": "161",
+            "end_line": "3810",
+            "hash": "daacf0faef231c1579644a11a1d2fb7863d5d0ab78a050f1f53918b05c94f808",
+            "hashTruncated": "daacf0faef231c15",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "3520": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "4000 REM FOUL SHOOTING",
+                "4010 IF RND(1)>.49 THEN 4050",
+                "4020 PRINT \"SHOOTER MAKES BOTH SHOTS.\"",
+                "4030 S(1-P)=S(1-P)+2",
+                "4040 GOSUB 6010",
+                "4041 RETURN",
+                "4050 IF RND(1)>.75 THEN 4100",
+                "4060 PRINT \"SHOOTER MAKES ONE SHOT AND MISSES ONE.\"",
+                "4070 S(1-P)=S(1-P)+1",
+                "4080 GOTO 4040"
+            ],
+            "start_line": "163",
+            "end_line": "4080",
+            "hash": "96745920a3af9e7305eb78ab6b910d91c8f3761c124aedfb32b0da2dbb5257b5",
+            "hashTruncated": "96745920a3af9e73",
+            "line_count": 10,
+            "references": {
+                "goto": {
+                    "4040": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "4100 PRINT \"BOTH SHOTS MISSED.\"",
+                "4110 GOTO 4040"
+            ],
+            "start_line": "173",
+            "end_line": "4110",
+            "hash": "269c51c0d6436c167f86a0220a5011d98943e12d4c79202ee5db396521c3ef73",
+            "hashTruncated": "269c51c0d6436c16",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "4040": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "5000 IF RND(1)>.75 THEN 5010",
+                "5005 GOTO 3165"
+            ],
+            "start_line": "175",
+            "end_line": "5005",
+            "hash": "264749b6e7a61f113431d6ec78f6df7eb5b71d101c839f6778273e2e4b701832",
+            "hashTruncated": "264749b6e7a61f11",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "3165": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "5010 PRINT \"BALL STOLEN.  EASY LAY UP FOR DARTMOUTH.\"",
+                "5015 GOSUB 7000",
+                "5030 GOTO 3000"
+            ],
+            "start_line": "177",
+            "end_line": "5030",
+            "hash": "db97c92d83345c38134b31b6365d6786cef5d321aff541cbc369bd9fca8b76a3",
+            "hashTruncated": "db97c92d83345c38",
+            "line_count": 3,
+            "references": {
+                "goto": {
+                    "3000": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "5100 IF RND(1)>.6 THEN 5120",
+                "5110 GOTO 1160"
+            ],
+            "start_line": "180",
+            "end_line": "5110",
+            "hash": "7cb2d2d314a76958c87cf935115daa585b40319715ba7438510deb609c4ac582",
+            "hashTruncated": "7cb2d2d314a76958",
+            "line_count": 2,
+            "references": {
+                "goto": {
+                    "1160": {
+                        "chunk_index": "Chunk 24",
+                        "hashTruncated": "ddc86a8aa0e6b9a9"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "5120 PRINT \"PASS STOLEN BY \";O$;\" EASY LAYUP.\"",
+                "5130 GOSUB 6000",
+                "5140 GOTO 425"
+            ],
+            "start_line": "182",
+            "end_line": "5140",
+            "hash": "be18a333e9ca4985d973ad6e806378d6abf41d8cccaab2d285ffce78875d4306",
+            "hashTruncated": "be18a333e9ca4985",
+            "line_count": 3,
+            "references": {
+                "goto": {
+                    "425": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "6000 S(0)=S(0)+2",
+                "6010 PRINT \"SCORE: \";S(1);\"TO\";S(0)",
+                "6020 RETURN",
+                "7000 S(1)=S(1)+2",
+                "7010 GOSUB 6010",
+                "7020 RETURN",
+                "8000 PRINT:PRINT \"   ***** END OF FIRST HALF *****\":PRINT",
+                "8010 PRINT \"SCORE: DARTMOUTH:\";S(1);\"  \";O$;\":\";S(0)",
+                "8015 PRINT",
+                "8016 PRINT",
+                "8020 GOTO 370"
+            ],
+            "start_line": "185",
+            "end_line": "8020",
+            "hash": "9bfb1d3fa4e85a48bef6538beca19a535258797cf5c8829e6152300bb5cb3e39",
+            "hashTruncated": "9bfb1d3fa4e85a48",
+            "line_count": 11,
+            "references": {
+                "goto": {
+                    "370": {
+                        "chunk_index": "Chunk 43",
+                        "hashTruncated": "e3c5af9d31b34561"
+                    }
+                }
+            }
+        },
+        {
+            "content": [
+                "9999 END"
+            ],
+            "start_line": "196",
+            "end_line": "9999",
+            "hash": "e3c5af9d31b34561f75a16175e666d24b501f6e2803613a420c065121cc72542",
+            "hashTruncated": "e3c5af9d31b34561",
+            "line_count": 1
+        }
+    ]
+}

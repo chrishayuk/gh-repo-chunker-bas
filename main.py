@@ -1,43 +1,63 @@
 import sys
-import json
-import os
 import argparse
 import logging
-from bas_chunker import chunk
+import os
+import json
+
+from utilities.file_handler import FileHandler
+from utilities.config_manager import ConfigManager
+from utilities.chunk_manager import ChunkManager
+from bas_chunker import reconstruct_program  # replace `your_chunker_module` with the correct module name
 
 logging.basicConfig(level=logging.INFO)
 
-def read_file(filename):
-    try:
-        with open(filename, 'r') as f:
-            # Return both the lines and the entire content
-            return [line.strip() for line in f if line.strip() and not line.startswith("REM")], f.read()
-    except Exception as e:
-        logging.error(f"Failed to read file: {e}")
-        sys.exit(1)
-
 def main(args):
-    lines, file_content = read_file(args.filename)
-    try:
-        result = chunk(lines, args.filename, file_content)
-    except Exception as e:
-        logging.error(f"Failed to chunk file: {e}")
+    # Check if reconstruction is needed
+    if args.reconstruct:
+        with open(args.filename, 'r') as f:
+            chunked_data = json.load(f)
+        
+        # Extract the type of the file from the metadata
+        file_type = chunked_data.get("metadata", {}).get("type")
+        
+        if file_type == "bas":
+            reconstructed_code = reconstruct_program(chunked_data)
+        else:
+            logging.error(f"Reconstruction not supported for type '{file_type}'.")
+            sys.exit(1)
+        
+        # Use FileHandler to save the reconstructed code
+        output_file = FileHandler.write_text_to_output(reconstructed_code, args.filename, file_type)
+        logging.info(f"Reconstructed code saved to {output_file}")
+        return
+
+    # Use FileHandler to read file
+    lines, file_content = FileHandler.read_file(args.filename)
+    
+    if not lines or not file_content:
         sys.exit(1)
 
-    # Create output directory if it doesn't exist
-    if not os.path.exists('output'):
-        os.makedirs('output')
+    file_extension = os.path.splitext(args.filename)[1]
 
-    # Save the result in the output folder
-    output_file = os.path.join('output', os.path.basename(args.filename) + ".json")
-    with open(output_file, "w") as f:
-        json.dump(result, f, indent=4)
+    # Use ConfigManager to get file config
+    file_config = ConfigManager.get_config_for_file(file_extension)
+    if not file_config:
+        logging.error(f"No configuration found for files with extension '{file_extension}'.")
+        sys.exit(1)
 
+    # Use ChunkManager to get processed chunks
+    result = ChunkManager.process_chunking(file_config, lines, args.filename, file_content)
+    if not result:
+        sys.exit(1)
+        
+    # Use FileHandler to save output
+    output_file = FileHandler.write_json_to_output(result, args.filename)
     logging.info(f"Chunked data saved to {output_file}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Process a BASIC code file and output a chunked JSON.')
-    parser.add_argument('filename', type=str, help='The filename of the BASIC code file to be processed')
+    parser = argparse.ArgumentParser(description='Process a BASIC code file and output a chunked JSON or reconstruct from chunked JSON.')
+    parser.add_argument('filename', type=str, help='The filename of the BASIC code file to be processed or reconstructed from')
+    parser.add_argument('--reconstruct', action='store_true', help='Reconstruct a program from chunked JSON file')
     
     args = parser.parse_args()
 

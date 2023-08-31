@@ -8,8 +8,8 @@ def extract_variables(line):
 
 def is_control_line(line):
     """Determines if a given line is a control line (e.g., GOTO or END)."""
-    return line.startswith("GOTO") or " GOTO " in line or line.startswith("END")
-
+    parts = line.strip().split(' ', 1)
+    return parts[0] in ["GOTO", "END", "GOSUB"] or (len(parts) > 1 and parts[1].startswith(("GOTO", "END")))
 
 def add_chunk(chunks, current_chunk, current_start, current_end):
     """Adds a chunk to the chunks list if current_chunk is not empty."""
@@ -63,7 +63,7 @@ def update_references(chunks):
                         }
 
 
-def calculate_metadata(chunks, all_vars, file_path, file_content):
+def calculate_metadata(chunks, all_vars, file_path, file_content, versions):
     """Computes metadata about the chunks and variables."""
     total_lines = sum(len(chunk["content"]) for chunk in chunks)
     lines_of_code = total_lines - sum(1 for line in file_content.split('\n') if is_control_line(line))
@@ -84,11 +84,12 @@ def calculate_metadata(chunks, all_vars, file_path, file_content):
         "total_lines": total_lines,
         "total_chunks": len(chunks),
         "average_chunk_size": total_lines / len(chunks) if chunks else 0,
-        "total_variables": len(all_vars)
+        "total_variables": len(all_vars),
+        "versions": versions
     }
 
 
-def chunk(lines, file_path, file_content):
+def chunk(lines, file_path, file_content, versions=[]):
     """Main chunking function that divides lines into chunks and computes metadata."""
     chunks = []
     current_chunk = []
@@ -114,9 +115,19 @@ def chunk(lines, file_path, file_content):
     combine_small_chunks(chunks)
     compute_hashes(chunks)
     update_references(chunks)
-    metadata = calculate_metadata(chunks, all_vars, file_path, file_content)
-
+    metadata = calculate_metadata(chunks, all_vars, file_path, file_content, versions)
+    
     return {
         "metadata": metadata,
         "chunks": chunks
     }
+
+def reconstruct_program(chunked_data):
+    chunks = chunked_data["chunks"]
+    reconstructed_lines = []
+
+    for chunk in chunks:
+        reconstructed_lines.extend(chunk["content"])
+
+    return "\n".join(reconstructed_lines)
+
