@@ -7,7 +7,11 @@ import json
 from utilities.file_handler import FileHandler
 from utilities.config_manager import ConfigManager
 from utilities.chunk_manager import ChunkManager
-from bas_chunker import reconstruct_program  # replace `your_chunker_module` with the correct module name
+from basic_chunker import reconstruct_program as reconstruct_basic
+from pascal_chunking.chunking import chunk as pascal_chunk
+from pascal_chunking.reconstruction import reconstruct_program as reconstruct_pascal
+from pascal_chunking.chunking import chunk
+print(chunk)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,7 +25,9 @@ def main(args):
         file_type = chunked_data.get("metadata", {}).get("type")
         
         if file_type == "bas":
-            reconstructed_code = reconstruct_program(chunked_data)
+            reconstructed_code = reconstruct_basic(chunked_data)
+        elif file_type == "pas":
+            reconstructed_code = reconstruct_pascal(chunked_data)
         else:
             logging.error(f"Reconstruction not supported for type '{file_type}'.")
             sys.exit(1)
@@ -55,8 +61,8 @@ def main(args):
     logging.info(f"Chunked data saved to {output_file}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Process a BASIC code file and output a chunked JSON or reconstruct from chunked JSON.')
-    parser.add_argument('filename', type=str, help='The filename of the BASIC code file to be processed or reconstructed from')
+    parser = argparse.ArgumentParser(description='Process a code file and output a chunked JSON or reconstruct from chunked JSON.')
+    parser.add_argument('filename', type=str, help='The filename of the code file to be processed or reconstructed from')
     parser.add_argument('--reconstruct', action='store_true', help='Reconstruct a program from chunked JSON file')
     
     args = parser.parse_args()

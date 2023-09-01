@@ -1,7 +1,7 @@
 import unittest
 
 # Import from the bas_chunker.py module
-from bas_chunker import chunk, reconstruct_program, is_control_line, extract_variables
+from basic_chunker import chunk, reconstruct_program, is_control_line, extract_variables
 
 class TestChunker(unittest.TestCase):
 

@@ -1,4 +1,4 @@
-import os
+import importlib
 import logging
 
 class ChunkManager:
@@ -6,9 +6,13 @@ class ChunkManager:
     @staticmethod
     def process_chunking(file_config, lines, filename, file_content):
         # Dynamically import the module based on configuration
-        module_name = os.path.splitext(file_config['chunker'])[0]
-        chunker_module = __import__(module_name)
-    
+        module_name = file_config['chunker']
+        try:
+            chunker_module = importlib.import_module(module_name)
+        except ImportError as e:
+            logging.error(f"Failed to import module '{module_name}': {e}")
+            return None
+        
         chunking_function = getattr(chunker_module, file_config["chunker_function"], None)
         if not chunking_function:
             logging.error(f"Chunking function '{file_config['chunker_function']}' not found!")

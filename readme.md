@@ -41,3 +41,23 @@ python main.py sample.bas
 ```
 
 After running, you'll find a `sample.bas.json` file in the same directory.
+
+## unit testing
+the following will do unit testing of the basic chunker
+
+```bash
+python -m unittest test_basic_chunker.py
+```
+
+the following will do unit testing of the pascal chunker
+
+```bash
+python -m unittest pascal_chunking.test_chunking
+```
+
+## future
+i still need to do the following
+
+- fix unit testing of pascal
+- implement repo level runs
+- reorganize the basic checker to match the pascal one
