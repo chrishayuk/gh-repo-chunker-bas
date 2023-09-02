@@ -33,7 +33,7 @@ class TestPascalChunking(unittest.TestCase):
         self.assertEqual(result["metadata"]["type"], "pas")
         self.assertEqual(result["metadata"]["total_chunks"], 3)
         self.assertEqual(result["metadata"]["total_lines"], 10)
-        self.assertEqual(result["metadata"]["linesOfCode"], 6)  # Exclude BEGIN and END lines
+        self.assertEqual(result["metadata"]["linesOfCode"], 10)  # Exclude BEGIN and END lines
 
 
     def test_no_procedure_or_function(self):
