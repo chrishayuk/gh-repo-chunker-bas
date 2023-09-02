@@ -43,6 +43,7 @@ def compute_hashes(chunks):
         chunk["hash"] = hash_full
         chunk["hashTruncated"] = hash_full[:16]
 
+
 def chunk(lines, file_path, file_content, versions=[]):
     chunks = []
     current_chunk = []
@@ -50,7 +51,7 @@ def chunk(lines, file_path, file_content, versions=[]):
     in_comment_block = False
     procedure_comment_block = []
     start_line = 1
-    procedure_stack = []
+    procedure_stack = []  # Used for keeping track of procedures and the main program.
 
     def is_next_line_procedure_or_function(lines, current_index):
         for i in range(current_index, len(lines)):
@@ -61,6 +62,10 @@ def chunk(lines, file_path, file_content, versions=[]):
 
     for line_num, line in enumerate(lines, 1):
         stripped_line = line.strip()
+
+        if "PROGRAM" in stripped_line:
+            program_name = stripped_line.split()[1].strip(" ;")  # Extract program name
+            procedure_stack.append(program_name)  # Add the program name to the stack
 
         if is_large_comment_block(stripped_line):
             in_comment_block = True
@@ -75,11 +80,12 @@ def chunk(lines, file_path, file_content, versions=[]):
             continue
 
         if is_procedure_or_function_start(stripped_line) and block_depth == 0:
-            parent_name = procedure_stack[-1] if procedure_stack else None
+            parent_name = procedure_stack[-2] if len(procedure_stack) > 1 else None
             parent_hash = hashlib.sha256(parent_name.encode()).hexdigest()[:16] if parent_name else None
-
+            
             procedure_name = stripped_line.split()[1].split('(')[0]
-
+            procedure_stack.append(procedure_name)  # Push the procedure on top of the program
+            
             if current_chunk:
                 chunks.append(calculate_chunk_metadata({
                     "content": current_chunk,
@@ -91,8 +97,6 @@ def chunk(lines, file_path, file_content, versions=[]):
                 current_chunk = []
                 start_line = line_num
 
-            procedure_stack.append(procedure_name)
-
             if procedure_comment_block:
                 current_chunk.extend(procedure_comment_block)
                 procedure_comment_block = []
@@ -101,13 +105,15 @@ def chunk(lines, file_path, file_content, versions=[]):
         block_depth += stripped_line.count("BEGIN") - stripped_line.count("END")
 
         if block_depth == 0 and is_end(stripped_line):
-            if procedure_stack:
-                # Check if current line is indeed the end of the top-most procedure on the stack
-                top_procedure = procedure_stack[-1]
-                if stripped_line.endswith(f"{top_procedure} END;"):
-                    procedure_stack.pop()
+            if len(procedure_stack) > 1:
+                top_procedure = procedure_stack[-2]
+            else:
+                top_procedure = procedure_stack[0] if procedure_stack else None
+                
+            parent_name = procedure_stack[-2] if len(procedure_stack) > 1 else None
+            if stripped_line.endswith(f"{top_procedure} END;"):
+                procedure_stack.pop()
 
-            parent_name = procedure_stack[-1] if procedure_stack else None
             parent_hash = hashlib.sha256(parent_name.encode()).hexdigest()[:16] if parent_name else None
 
             chunks.append(calculate_chunk_metadata({
@@ -122,7 +128,7 @@ def chunk(lines, file_path, file_content, versions=[]):
             current_chunk = []
 
     if current_chunk:
-        parent_name = procedure_stack[-1] if procedure_stack else None
+        parent_name = procedure_stack[-2] if procedure_stack else None
         parent_hash = hashlib.sha256(parent_name.encode()).hexdigest()[:16] if parent_name else None
 
         chunks.append(calculate_chunk_metadata({
@@ -139,3 +145,6 @@ def chunk(lines, file_path, file_content, versions=[]):
         "metadata": file_metadata,
         "chunks": chunks
     }
+
+# Make sure to include any missing helper functions like `is_large_comment_block`, 
+# `is_procedure_or_function_start`, `calculate_chunk_metadata`, `is_end` and `compute_file_metadata`.
