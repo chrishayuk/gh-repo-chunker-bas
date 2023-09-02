@@ -11,6 +11,8 @@ from chunkers.pascal_chunking.chunking import chunk as pascal_chunk
 from chunkers.pascal_chunking.reconstruction import reconstruct_program as reconstruct_pascal
 from chunkers.basic_chunking.chunking import chunk as basic_chunk
 from chunkers.basic_chunking.reconstruction import reconstruct_program as reconstruct_basic
+from chunkers.fortran_chunking.chunking import chunk as fortran_chunk  # New Import
+from chunkers.fortran_chunking.reconstruction import reconstruct_program as reconstruct_fortran  # New Import
 
 logging.basicConfig(level=logging.INFO)
 
@@ -27,6 +29,8 @@ def main(args):
             reconstructed_code = reconstruct_basic(chunked_data)
         elif file_type == "pas":
             reconstructed_code = reconstruct_pascal(chunked_data)
+        elif file_type == "f90":  # Fortran reconstruction
+            reconstructed_code = reconstruct_fortran(chunked_data)  # Change this to the actual function for Fortran reconstruction
         else:
             logging.error(f"Reconstruction not supported for type '{file_type}'.")
             sys.exit(1)

@@ -12,7 +12,7 @@ def is_begin(line):
     stripped_line = line.strip().upper()
     return stripped_line.startswith(('SUBROUTINE', 'FUNCTION', 'MODULE', 'DO', 'IF', 'SELECT CASE', 'PROGRAM'))
 
-def is_end(line):
+def is_end_statement(line):
     """Checks if the line indicates the end of a block in Fortran."""
     stripped_line = line.strip().upper()
     return 'END' in stripped_line  # can be END, END DO, END IF, END FUNCTION, etc.

@@ -28,10 +28,8 @@ def extract_definitions(chunk_lines):
             functions.add(function_name)
 
         # Detect and handle variable/type definition sections
-        if any(stripped_line.startswith(keyword) for keyword in ["REAL", "INTEGER", "CHARACTER", "LOGICAL", "COMPLEX", "DOUBLE PRECISION"]):
+        if any(stripped_line.startswith(keyword) for keyword in ["REAL", "INTEGER", "CHARACTER", "LOGICAL", "COMPLEX", "DOUBLE PRECISION"]) and "INTENT" not in stripped_line and "PARAMETER" not in stripped_line:
             in_var_block = True
-            var_list = re.split(r'[:,]', stripped_line.split('::')[-1])
-            global_vars.update([var.strip() for var in var_list])
         elif stripped_line.startswith("TYPE") and "=" not in stripped_line:  # Avoid confusion with TYPE casting
             in_type_block = True
             type_name = stripped_line.split()[1]
@@ -40,8 +38,14 @@ def extract_definitions(chunk_lines):
             in_type_block = False
         elif any(stripped_line.startswith(keyword) for keyword in ["SUBROUTINE", "FUNCTION", "PROGRAM", "MODULE"]):
             in_var_block = False
-        elif in_var_block and "::" in stripped_line:
-            var_list = re.split(r'[:,]', stripped_line.split('::')[-1])
-            global_vars.update([var.strip() for var in var_list])
+        elif "::" in stripped_line:
+            variables = stripped_line.split('::')[-1]
+            # Process variables by separating out array definitions from plain variables
+            for var in re.split(r'[:,]', variables):
+                var = var.strip()
+                # Check if the variable has dimensions
+                if "(" in var and ")" in var:
+                    var = var.split("(")[0] + "()"
+                global_vars.add(var)
 
     return list(modules), list(subroutines), list(functions), list(global_vars), list(user_types)
