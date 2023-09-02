@@ -32,7 +32,7 @@ Replace `<path_to_BASIC_file.bas>` with the path to your BASIC file.
 
 4. Upon successful execution, you'll find a JSON file in the same directory with the `.bas.json` extension. This file contains the chunked data and metadata of your BASIC code.
 
-## Example
+## Basic Example
 
 Suppose you have a file named `sample.bas`. You can chunk it by running:
 
@@ -41,23 +41,30 @@ python main.py sample.bas
 ```
 
 After running, you'll find a `sample.bas.json` file in the same directory.
+### acey ducey
+this will chunk the acey ducey game
+
+```bash
+python main.py samples/bas/aceyducey.bas
+```
+
+### basketball
+this will chunk the basketball game
+
+```bash
+python main.py samples/bas/basketball.bas
+```
+
 
 ## unit testing
 the following will do unit testing of the basic chunker
 
 ```bash
-python -m unittest test_basic_chunker.py
-```
-
-the following will do unit testing of the pascal chunker
-
-```bash
-python -m unittest pascal_chunking.test_chunking
+python -m unittest chunkers.basic_chunking.test_chunking
 ```
 
 ## future
 i still need to do the following
 
-- fix unit testing of pascal
 - implement repo level runs
 - reorganize the basic checker to match the pascal one

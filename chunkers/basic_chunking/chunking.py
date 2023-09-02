@@ -1,15 +1,6 @@
 import hashlib
-
-
-def extract_variables(line):
-    """Extracts all the variables from a given line."""
-    return set(line.split())
-
-
-def is_control_line(line):
-    """Determines if a given line is a control line (e.g., GOTO or END)."""
-    parts = line.strip().split(' ', 1)
-    return parts[0] in ["GOTO", "END", "GOSUB"] or (len(parts) > 1 and parts[1].startswith(("GOTO", "END")))
+from .extraction import extract_variables
+from .utility import is_control_line
 
 def add_chunk(chunks, current_chunk, current_start, current_end):
     """Adds a chunk to the chunks list if current_chunk is not empty."""
@@ -121,13 +112,4 @@ def chunk(lines, file_path, file_content, versions=[]):
         "metadata": metadata,
         "chunks": chunks
     }
-
-def reconstruct_program(chunked_data):
-    chunks = chunked_data["chunks"]
-    reconstructed_lines = []
-
-    for chunk in chunks:
-        reconstructed_lines.extend(chunk["content"])
-
-    return "\n".join(reconstructed_lines)
 

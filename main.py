@@ -7,11 +7,10 @@ import json
 from utilities.file_handler import FileHandler
 from utilities.config_manager import ConfigManager
 from utilities.chunk_manager import ChunkManager
-from basic_chunker import reconstruct_program as reconstruct_basic
-from pascal_chunking.chunking import chunk as pascal_chunk
-from pascal_chunking.reconstruction import reconstruct_program as reconstruct_pascal
-from pascal_chunking.chunking import chunk
-print(chunk)
+from chunkers.pascal_chunking.chunking import chunk as pascal_chunk
+from chunkers.pascal_chunking.reconstruction import reconstruct_program as reconstruct_pascal
+from chunkers.basic_chunking.chunking import chunk as basic_chunk
+from chunkers.basic_chunking.reconstruction import reconstruct_program as reconstruct_basic
 
 logging.basicConfig(level=logging.INFO)
 

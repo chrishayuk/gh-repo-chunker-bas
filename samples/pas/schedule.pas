@@ -1,32 +1,7 @@
-(**************************************************************************
+(***
  *
- * This program maintains a small work schedule covering the hours 8-6.
- * It processes the following commands:
- *
- * sched employee startday endday starthour endhour
- *        The  employee is added to the schedule in the range of days and
- *        hours  indicated.
- *
- * clear startday endday starthour endhour
- *        The  part  of the schedule indicated is cleared  any assignment
- *        of an employee during those hours is removed. 
- *
- * unsched employee
- *        Remove  the  employee  from all places in the schedule to which
- *        s/he has been assigned.
- *
- * print
- *        Print  the  schedule. Show a table with days along the top, and
- *        hours  down  the  side,  giving  the scheduled employee in each
- *        position.
- *
- * total employee
- *        Print  the  total hours for which the employee is scheduled. If
- *        the employee does not appear in the table, the total is 0.
- *
- * quit
- *        Terminate the program.
- **************************************************************************)
+ * comments
+ **)
 
 PROGRAM a1 (input,output);
     USES dayio;
@@ -89,20 +64,6 @@ PROGRAM a1 (input,output);
 
     (***********************************************************************
      * Procedure to read the arguments held in common by the sched 
-     * clear commands.  Returns them through the arguments.  If there
-     * is some error, that is reported through the argument error.
-     *  Precondition: Following the read pointer, the input contains
-     *    two days of the week, then two integers.  If all days are present and
-     *    correct, the integers must be present and correct.
-     *  Postcondition: If both strings are recognized day names,
-     *    they are read, and the integers are read as well, and their values
-     *    are loaded into StartDay, EndDay, StartHour, and EndHour, and Error
-     *    is set to false.  The hours are mapped to 24-hour clock time under
-     *    the rule that hours less than 6 are PM, and others are AM.  If a day
-     *    is missing or not recognized, the rest of the input line is
-     *    discarded, and Error is set to true.  If there is extra information
-     *    on the line, it is discared.  The read pointer is left at the start
-     *    of the following line.
      ***********************************************************************)
     PROCEDURE ReadSchedClrArgs(
             VAR StartDay, EndDay: DayType;      { Input days. }
@@ -179,12 +140,6 @@ PROGRAM a1 (input,output);
 
     {****************************************************************
      * Function that tells if a pending schedule is legal.
-     * Its arguments are those of sched, excluding the employee name.
-     *  Precondition: FirstHour and LastHour are in range.
-     *  Postcondition: If the indicated area of the schedule contains
-     *    blanks in each entry, then return true, else false.
-     *  Note: Schedule is sent by VAR for efficiency -- it is not
-     *    changed.
      ****************************************************************}
     FUNCTION SchedLegal(
             VAR Schedule: ScheduleType;     { Schedule to check. }
@@ -222,15 +177,6 @@ PROGRAM a1 (input,output);
 
     {****************************************************************
      * This takes care of most of the work of the clear and sched
-     * commands.  Its arguments are those of sched, with blanks in
-     * Employee for the clear.  It places this name in each indicated
-     * postion.
-     *  Precondition: FirstHour and LastHour are in range.
-     *  Postcondition: The area of the schedule is changed to show
-     *    the indicated employee.
-     *  Note: This will replace any old entry, so the sched command
-     *    should call SchedLegal above to make sure the operation
-     *    is legal before calling this routine.
      ****************************************************************}
     PROCEDURE SetSchedPart(
             VAR Schedule: ScheduleType;     { Set me! Set me! }
@@ -250,12 +196,6 @@ PROGRAM a1 (input,output);
     {****************************************************************
      * Perform the sched command.
      *  Precondition: The read pointer is followed by the arguments 
-     *    for the sched command.
-     *  Postcondition: The arguments have been read and echoed, and the
-     *    read pointer is on the next line.  The sched command has been
-     *    performed with appropriate messages.
-     * Note: DayMap is passed by VAR for efficiency -- it is not
-     *    changed.
      ****************************************************************}
     PROCEDURE DoSched(
             VAR Schedule: ScheduleType);    { Change this. }
@@ -294,13 +234,6 @@ PROGRAM a1 (input,output);
 
     {****************************************************************
      * Perform the clear command.
-     *  Precondition: The read pointer is followed by the arguments 
-     *    for the clear command.
-     *  Postcondition: The arguments have been read and echoed, and the
-     *    read pointer is on the next line.  The clear command has been
-     *    performed with appropriate messages.
-     * Note: DayMap is passed by VAR for efficiency -- it is not
-     *    changed.
      ****************************************************************}
     PROCEDURE DoClear(
             VAR Schedule: ScheduleType);    { Change this. }
@@ -326,11 +259,6 @@ PROGRAM a1 (input,output);
 
     {****************************************************************
      * Peform the unsched command.
-     *  Precondition: The read pointer is followed by an employee 
-     *    name.
-     *  Postcondition: The argument has been read and echoed, and the
-     *    read pointer is on the next line.  The employee read has been
-     *    removed from Schedule.
      ****************************************************************}
     PROCEDURE DoUnsched(
             VAR Schedule: ScheduleType);        { Remove from. }
@@ -364,20 +292,13 @@ PROGRAM a1 (input,output);
                                     ' was not on the schedule. <<<')
         END; { DoUnsched }
 
-    {****************************************************************
-     * Peform the print command.
-     *  Precondition: None.
-     *  Postcondition: Schedule has been printed to output.
-     ****************************************************************}
     PROCEDURE DoPrint(
             VAR Schedule: ScheduleType);        { Print me. }
         VAR
             Hour: HourType;                     { Hour scan. }
             Day: DayType;                       { Day scan. }
 
-        { Map from 24-hour time to 12-hour time.  Arguments less than
-          13 are simply returned, arguments greater than 12 are 
-          reduced by 12 and returned. }
+        { Map }
         FUNCTION Map24to12(HourType: HourType): integer;
             BEGIN
                 IF Hour < 13 THEN
@@ -399,14 +320,6 @@ PROGRAM a1 (input,output);
                 END
         END;
 
-    {****************************************************************
-     * Peform the total command.
-     *  Precondition: The read pointer is followed by an employee 
-     *    name.
-     *  Postcondition: The argument has been read and echoed, and the
-     *    read pointer is on the next line.  The total scheduled hours
-     *    for the employee read has been printed.
-     ****************************************************************}
     PROCEDURE DoTotal(
             VAR Schedule: ScheduleType);        { The schedule. }
         VAR

@@ -1,9 +1,12 @@
 import unittest
 
 # Import from the bas_chunker.py module
-from basic_chunker import chunk, reconstruct_program, is_control_line, extract_variables
+from chunkers.basic_chunking.chunking import chunk
+from chunkers.basic_chunking.reconstruction import reconstruct_program
+from chunkers.basic_chunking.utility import is_control_line
+from chunkers.basic_chunking.extraction import extract_variables
 
-class TestChunker(unittest.TestCase):
+class TestBasicChunking(unittest.TestCase):
 
     def test_extract_variables(self):
         self.assertEqual(extract_variables("A = 5"), {"A", "=", "5"})
