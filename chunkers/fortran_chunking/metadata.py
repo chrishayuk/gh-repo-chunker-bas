@@ -1,5 +1,5 @@
-# metadata.py
 import hashlib
+import re
 from .extraction import extract_definitions
 
 def compute_file_metadata(file_path, file_content, lines, chunks, versions=[]):
@@ -13,7 +13,7 @@ def compute_file_metadata(file_path, file_content, lines, chunks, versions=[]):
     
     return {
         "filePath": file_path,
-        "type": "f90",  # A common extension for Fortran 90/95, change if needed
+        "type": "f90",
         "size": file_size,
         "linesOfCode": lines_of_code,
         "documentationPercentage": doc_percentage,
@@ -31,7 +31,6 @@ def compute_file_metadata(file_path, file_content, lines, chunks, versions=[]):
         "user_types": user_types
     }
 
-
 def calculate_chunk_metadata(chunk):
     content = chunk["content"]
     lines_of_code = len(content)
@@ -40,16 +39,26 @@ def calculate_chunk_metadata(chunk):
     parent_name = chunk.get("parent_name", None)
     parent_hash = chunk.get("parent_hash", None)
 
-    # Extract variables (a more refined logic)
+    # Reserved keywords and intrinsic functions
+    keywords = ['intent', 'parameter', 'type', 'reshape']
+
+    # Extract variables with refined regex
     variables = []
+    variable_pattern = re.compile(r"([a-zA-Z_]\w*)\s*(\([\w\s,=]*\))?", re.I)
+    
     for line in content:
         if "::" in line:
             var_line = line.split("::")[1].strip().split("!")[0].strip()
-            for var in var_line.split(","):
-                cleaned_var = var.strip()
-                if "(" in cleaned_var and ")" in cleaned_var:
-                    cleaned_var = cleaned_var.split("(")[0].strip() + "()"
-                variables.append(cleaned_var)
+            matches = variable_pattern.findall(var_line)
+            for var_name, dims in matches:
+                if var_name.lower() not in keywords and not var_name.isdigit():
+                    if dims:
+                        variables.append(var_name + dims)
+                    else:
+                        variables.append(var_name)
+
+    # Remove duplicates
+    variables = list(dict.fromkeys(variables))
 
     return {
         "content": content,
@@ -60,6 +69,5 @@ def calculate_chunk_metadata(chunk):
         "metadata": {
             "variables": variables,
             "linesOfCode": lines_of_code
-            # ... any other metadata extraction logic ...
         }
     }

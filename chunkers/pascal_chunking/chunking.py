@@ -46,6 +46,8 @@ def compute_hashes(chunks):
         chunk["hashTruncated"] = hash_full[:16]
 
 import re
+
+import re
 import hashlib
 
 def chunk(lines, file_path=None, file_content=None, versions=[]):
@@ -53,50 +55,38 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
     current_chunk = []
     block_depth = 0
     start_line = 1
-    procedure_stack = []
+    program_stack = []
     comment_cache = []
-    program_name = None  # Initialize program_name variable
+    program_name = None
 
-    def is_procedure_or_function_start(line):
-        return re.match(r"^\s*(procedure|function)\s+\w+", line, re.I) is not None
+    def is_program_start(line):
+        return re.match(r"^\s*program\s+\w+", line, re.I) is not None
 
     def get_parent_hash(parent_name):
         return hashlib.sha256(parent_name.encode()).hexdigest()[:16] if parent_name else None
-
-    in_multiline_comment = False
-    in_block_comment = False
 
     for line_num, line in enumerate(lines, 1):  # Enumerate from 1 for correct line numbers.
         stripped_line = line.strip().lower()
 
         # Handling comments
-        if stripped_line.startswith("(*"):
-            in_multiline_comment = True
-        if stripped_line.startswith("{"):
-            in_block_comment = True
-
-        if in_multiline_comment or in_block_comment:
+        if stripped_line.startswith("!"):
             comment_cache.append(line)
-            if stripped_line.endswith("*)"):
-                in_multiline_comment = False
-            if stripped_line.endswith("}"):
-                in_block_comment = False
             continue
-        
+
         # Skip blank lines
         if not stripped_line:
             continue
 
         # For a program's main declaration, save its name and add any preceding comments to the chunk.
-        if re.match(r"^\s*program\s+\w+", stripped_line, re.I):
-            program_name = re.search(r"\bprogram\s+(\w+)", stripped_line, re.I).groups()[0]  # Extract and save program name
+        if is_program_start(stripped_line):
+            program_name = re.search(r"\bprogram\s+(\w+)", stripped_line, re.I).groups()[0]
             if current_chunk:
                 chunk_data = {
                     "content": current_chunk.copy(),
                     "start_line": start_line,
                     "end_line": line_num - len(comment_cache) - 1,
-                    "parent_name": procedure_stack[-1] if procedure_stack else program_name,  # Use program_name for global procedures
-                    "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else program_name)
+                    "parent_name": program_stack[-1] if program_stack else None,
+                    "parent_hash": get_parent_hash(program_stack[-1] if program_stack else None)
                 }
                 chunks.append(calculate_chunk_metadata(chunk_data))
                 current_chunk = []
@@ -104,31 +94,26 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
             current_chunk.extend(comment_cache)
             comment_cache.clear()
 
-        # Handle procedure or function start
-        if is_procedure_or_function_start(stripped_line):
-            procedure_name = re.search(r"\b(procedure|function)\s+(\w+)", stripped_line, re.I).groups()[1]
-            procedure_stack.append(procedure_name)
-
         current_chunk.append(line)
 
         # Adjust block depth
-        block_depth += stripped_line.count("begin")
-        block_depth -= stripped_line.count("end")
+        block_depth += stripped_line.count("subroutine")
+        block_depth -= stripped_line.count("end subroutine")
 
         # If we encounter an 'end' with block depth of zero, finish the procedure or the main program
-        if block_depth == 0 and "end" in stripped_line:
+        if block_depth == 0 and ("end program" in stripped_line or "end subroutine" in stripped_line):
             chunk_data = {
                 "content": current_chunk.copy(),
                 "start_line": start_line,
                 "end_line": line_num,
-                "parent_name": procedure_stack[-1] if procedure_stack else program_name,  # Use program_name for global procedures
-                "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else program_name)
+                "parent_name": program_stack[-1] if program_stack else None,
+                "parent_hash": get_parent_hash(program_stack[-1] if program_stack else None)
             }
             chunks.append(calculate_chunk_metadata(chunk_data))
             current_chunk = []
             start_line = line_num + 1
-            if procedure_stack:
-                procedure_stack.pop()
+            if program_stack:
+                program_stack.pop()
 
     # Handle any leftover content
     if current_chunk:
@@ -136,8 +121,8 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
             "content": current_chunk,
             "start_line": start_line,
             "end_line": line_num,
-            "parent_name": procedure_stack[-1] if procedure_stack else program_name,  # Use program_name for global procedures
-            "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else program_name)
+            "parent_name": program_stack[-1] if program_stack else None,
+            "parent_hash": get_parent_hash(program_stack[-1] if program_stack else None)
         }
         chunks.append(calculate_chunk_metadata(chunk_data))
 

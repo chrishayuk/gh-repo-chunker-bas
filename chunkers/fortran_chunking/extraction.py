@@ -1,5 +1,28 @@
 import re
 
+def extract_variables_from_declaration_line(line):
+    """Extract variable names from a Fortran declaration line."""
+    # Extract everything after the "::" delimiter
+    content_after_delimiter = line.split("::")[-1]
+    # If there's an assignment in the line, only consider the left-hand side of the assignment
+    if "=" in content_after_delimiter:
+        content_after_delimiter = content_after_delimiter.split("=")[0]
+    
+    # Using regex to split the content by commas but not within brackets
+    variables = re.split(r',(?![^()]*\))', content_after_delimiter)
+    
+    # Clean and format variables
+    cleaned_vars = []
+    for var in variables:
+        var = var.strip()
+        # Check and reformat variable representations with dimensions
+        if "(" in var and ")" in var:
+            var = var.split("(")[0] + "()"
+        # Ensure that variable names start with a valid character (avoiding numbers or special characters)
+        if re.match(r"^[A-Za-z_]", var):
+            cleaned_vars.append(var)
+    return cleaned_vars
+
 def extract_definitions(chunk_lines):
     """Extract definitions such as modules, subroutines, functions, global variables, and types from given Fortran chunk lines."""
     modules = set()
@@ -7,9 +30,6 @@ def extract_definitions(chunk_lines):
     functions = set()
     global_vars = set()
     user_types = set()
-
-    in_var_block = False
-    in_type_block = False
 
     for line in chunk_lines:
         stripped_line = line.strip().upper()  # Use upper() for case-insensitivity
@@ -27,25 +47,14 @@ def extract_definitions(chunk_lines):
             function_name = stripped_line.split()[1].split("(")[0]
             functions.add(function_name)
 
-        # Detect and handle variable/type definition sections
-        if any(stripped_line.startswith(keyword) for keyword in ["REAL", "INTEGER", "CHARACTER", "LOGICAL", "COMPLEX", "DOUBLE PRECISION"]) and "INTENT" not in stripped_line and "PARAMETER" not in stripped_line:
-            in_var_block = True
-        elif stripped_line.startswith("TYPE") and "=" not in stripped_line:  # Avoid confusion with TYPE casting
-            in_type_block = True
+        # Handle user types
+        if stripped_line.startswith("TYPE") and "=" not in stripped_line:  # Avoid confusion with TYPE casting
             type_name = stripped_line.split()[1]
             user_types.add(type_name)
-        elif stripped_line.startswith("END TYPE"):
-            in_type_block = False
-        elif any(stripped_line.startswith(keyword) for keyword in ["SUBROUTINE", "FUNCTION", "PROGRAM", "MODULE"]):
-            in_var_block = False
-        elif "::" in stripped_line:
-            variables = stripped_line.split('::')[-1]
-            # Process variables by separating out array definitions from plain variables
-            for var in re.split(r'[:,]', variables):
-                var = var.strip()
-                # Check if the variable has dimensions
-                if "(" in var and ")" in var:
-                    var = var.split("(")[0] + "()"
-                global_vars.add(var)
+
+        # Extract global variables
+        declaration_keywords = ["REAL", "INTEGER", "CHARACTER", "LOGICAL", "COMPLEX", "DOUBLE PRECISION"]
+        if any(stripped_line.startswith(keyword) for keyword in declaration_keywords) and "INTENT" not in stripped_line and "PARAMETER" not in stripped_line:
+            global_vars.update(extract_variables_from_declaration_line(stripped_line))
 
     return list(modules), list(subroutines), list(functions), list(global_vars), list(user_types)

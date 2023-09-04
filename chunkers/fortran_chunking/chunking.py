@@ -1,12 +1,7 @@
 import hashlib
-from .extraction import extract_definitions
-from .utility import (
-    is_subroutine_or_function_start,
-    is_large_comment_block,
-    is_module_start,
-    is_end_statement
-)
 from .metadata import calculate_chunk_metadata, compute_file_metadata
+
+import re
 
 def chunk(lines, file_path, file_content, versions=[]):
     chunks = []
@@ -15,67 +10,76 @@ def chunk(lines, file_path, file_content, versions=[]):
     start_line = 1
     procedure_stack = []
 
-    for line_num, line in enumerate(lines, 1):
-        stripped_line = line.strip().upper()
+    def get_parent_hash(parent_name):
+        return hashlib.sha256(parent_name.encode()).hexdigest()[:16] if parent_name else None
 
-        if stripped_line.startswith("PROGRAM"):
-            program_name = stripped_line.split()[1].strip()  # Extract program name
-            procedure_stack.append(program_name)  # Add the program name to the stack
+    def is_block_start(line):
+        return re.match(r"^\s*(PROGRAM|SUBROUTINE|FUNCTION|MODULE|CONTAINS)", line, re.I)
 
-        if stripped_line.startswith("SUBROUTINE") or stripped_line.startswith("FUNCTION"):
-            parent_name = procedure_stack[-1] if procedure_stack else None
-            parent_hash = hashlib.sha256(parent_name.encode()).hexdigest()[:16] if parent_name else None
-            
-            procedure_name = stripped_line.split()[1].split('(')[0]
-            procedure_stack.append(procedure_name)  # Push the procedure on top of the stack
-            
-            if current_chunk:
-                chunks.append(calculate_chunk_metadata({
-                    "content": current_chunk,
-                    "start_line": start_line,
-                    "end_line": line_num - 1,
-                    "parent_name": parent_name,
-                    "parent_hash": parent_hash
-                }))
-                current_chunk = []
-                start_line = line_num
+    def get_name_from_block(line):
+        matches = re.search(r"\b(PROGRAM|SUBROUTINE|FUNCTION|MODULE)\s+(\w+)", line, re.I)
+        return matches.groups()[1] if matches else None
 
-        current_chunk.append(line)
-
-        # Increase block depth when a new block starts and decrease when it ends
-        if any(stripped_line.startswith(kw) for kw in ["DO", "IF", "SELECT CASE"]):
-            block_depth += 1
-
-        if any(stripped_line.startswith(f"END {kw}") for kw in ["DO", "IF", "SELECT CASE"]):
-            block_depth -= 1
-
-        if block_depth == 0 and any(stripped_line.startswith(f"END {kw}") for kw in ["PROGRAM", "SUBROUTINE", "FUNCTION"]):
-            procedure_stack.pop()  # End of the current procedure
-            parent_name = procedure_stack[-1] if procedure_stack else None
-            parent_hash = hashlib.sha256(parent_name.encode()).hexdigest()[:16] if parent_name else None
-
+    def add_chunk(start, end, content):
+        parent_name = procedure_stack[-1] if procedure_stack else None
+        parent_hash = get_parent_hash(parent_name)
+        if content:  # Add the chunk only if it has content
             chunks.append(calculate_chunk_metadata({
-                "content": current_chunk,
-                "start_line": start_line,
-                "end_line": line_num,
+                "content": content,
+                "start_line": start,
+                "end_line": end,
                 "parent_name": parent_name,
                 "parent_hash": parent_hash
             }))
 
-            start_line = line_num + 1
+    is_inside_c_comment = False
+    for line_num, line in enumerate(lines, 1):
+        stripped_line = line.strip().upper()
+
+        # Handle C-style comments
+        if stripped_line.startswith("/*"):
+            is_inside_c_comment = True
+        if is_inside_c_comment:
+            if "*/" in stripped_line:
+                is_inside_c_comment = False
+            continue
+
+        # Handle regular Fortran comments
+        if stripped_line.startswith(('!', 'C', '//')):
+            continue
+
+        # Adjust block depth
+        if any(stripped_line.startswith(kw) for kw in ["DO", "IF", "SELECT CASE"]):
+            block_depth += 1
+        if any(stripped_line.startswith(f"END {kw}") for kw in ["DO", "IF", "SELECT CASE"]):
+            block_depth -= 1
+
+        # Block start: PROGRAM, SUBROUTINE, FUNCTION, MODULE, CONTAINS
+        if is_block_start(stripped_line):
+            if 'CONTAINS' not in stripped_line:
+                if procedure_stack:
+                    add_chunk(start_line, line_num - 1, current_chunk)
+                    current_chunk = []
+                start_line = line_num
+                procedure_name = get_name_from_block(stripped_line)
+                if procedure_name:
+                    procedure_stack.append(procedure_name)
+
+        current_chunk.append(line)
+
+        # End of block: PROGRAM, SUBROUTINE, FUNCTION, MODULE
+        if block_depth == 0 and any(stripped_line.startswith(f"END {kw}") for kw in ["PROGRAM", "SUBROUTINE", "FUNCTION", "MODULE"]):
+            if 'MODULE' in stripped_line:
+                continue
+            add_chunk(start_line, line_num, current_chunk)
             current_chunk = []
+            start_line = line_num + 1
+            if procedure_stack:
+                procedure_stack.pop()
 
+    # Handle any leftover content
     if current_chunk:
-        parent_name = procedure_stack[-1] if procedure_stack else None
-        parent_hash = hashlib.sha256(parent_name.encode()).hexdigest()[:16] if parent_name else None
-
-        chunks.append(calculate_chunk_metadata({
-            "content": current_chunk,
-            "start_line": start_line,
-            "end_line": line_num,
-            "parent_name": parent_name,
-            "parent_hash": parent_hash
-        }))
+        add_chunk(start_line, line_num, current_chunk)
 
     file_metadata = compute_file_metadata(file_path, file_content, lines, chunks, versions)
 
