@@ -42,7 +42,6 @@ def compute_hashes(chunks):
         hash_full = hash_obj.hexdigest()
         chunk["hash"] = hash_full
         chunk["hashTruncated"] = hash_full[:16]
-
 import re
 import hashlib
 
@@ -60,18 +59,23 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
     def get_parent_hash(parent_name):
         return hashlib.sha256(parent_name.encode()).hexdigest()[:16] if parent_name else None
 
-    in_comment = False
+    in_multiline_comment = False
+    in_block_comment = False
 
     for line_num, line in enumerate(lines, 1):  # Enumerate from 1 for correct line numbers.
         stripped_line = line.strip().lower()
 
         if stripped_line.startswith("(*"):
-            in_comment = True
+            in_multiline_comment = True
+        if stripped_line.startswith("{"):
+            in_block_comment = True
 
-        if in_comment:
+        if in_multiline_comment or in_block_comment:
             comment_cache.append(line)
             if stripped_line.endswith("*)"):
-                in_comment = False
+                in_multiline_comment = False
+            if stripped_line.endswith("}"):
+                in_block_comment = False
             continue  # Continue regardless of whether the comment ended to prevent double-counting
         
         # If the line is not part of a comment and not blank, it might be the start of a new chunk.

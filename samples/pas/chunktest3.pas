@@ -19,6 +19,9 @@ BEGIN
     writeln('Procedure B');
 END;
 
+{
+    This is the comment for the begin end block
+}
 BEGIN
     A;
     B;
