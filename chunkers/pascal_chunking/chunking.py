@@ -1,5 +1,7 @@
 import hashlib
 from .extraction import extract_definitions
+
+
 from .utility import (is_procedure_or_function_start, 
                       safe_get_line, 
                       safe_get_next_line, 
@@ -65,6 +67,7 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
     for line_num, line in enumerate(lines, 1):  # Enumerate from 1 for correct line numbers.
         stripped_line = line.strip().lower()
 
+        # Handling comments
         if stripped_line.startswith("(*"):
             in_multiline_comment = True
         if stripped_line.startswith("{"):
@@ -76,29 +79,30 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
                 in_multiline_comment = False
             if stripped_line.endswith("}"):
                 in_block_comment = False
-            continue  # Continue regardless of whether the comment ended to prevent double-counting
+            continue
         
-        # If the line is not part of a comment and not blank, it might be the start of a new chunk.
+        # Skip blank lines
         if not stripped_line:
             continue
 
         # For a program's main declaration or procedure, we add any preceding comments to the chunk.
         if re.match(r"^\s*program\s+\w+", stripped_line, re.I) or is_procedure_or_function_start(stripped_line) or (stripped_line == "begin" and not procedure_stack and not current_chunk):
-            # If we start a new procedure or program and there is already content in the current chunk, create a new chunk.
+            # If starting a new procedure or program with content already in the current chunk, create a new chunk.
             if current_chunk:
-                chunks.append({
+                chunk_data = {
                     "content": current_chunk.copy(),
                     "start_line": start_line,
                     "end_line": line_num - len(comment_cache) - 1,
-                    "parent_name": None,
-                    "parent_hash": None
-                })
+                    "parent_name": procedure_stack[-1] if procedure_stack else None,
+                    "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else None)
+                }
+                chunks.append(calculate_chunk_metadata(chunk_data))
                 current_chunk = []
                 start_line = line_num - len(comment_cache)
             current_chunk.extend(comment_cache)
             comment_cache.clear()
 
-        procedure_name = None
+        # Handle procedure or function start
         if is_procedure_or_function_start(stripped_line):
             procedure_name = re.search(r"\b(procedure|function)\s+(\w+)", stripped_line, re.I).groups()[1]
             procedure_stack.append(procedure_name)
@@ -109,31 +113,35 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
         block_depth += stripped_line.count("begin")
         block_depth -= stripped_line.count("end")
 
-        # If we encounter an 'end' and our block depth is zero, we've finished a procedure or the main program
+        # If we encounter an 'end' with block depth of zero, finish the procedure or the main program
         if block_depth == 0 and "end" in stripped_line:
-            chunks.append({
+            chunk_data = {
                 "content": current_chunk.copy(),
                 "start_line": start_line,
                 "end_line": line_num,
                 "parent_name": procedure_stack[-1] if procedure_stack else None,
                 "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else None)
-            })
+            }
+            chunks.append(calculate_chunk_metadata(chunk_data))
             current_chunk = []
             start_line = line_num + 1
             if procedure_stack:
                 procedure_stack.pop()
 
-    # If there's any leftover content, add it to the chunks
+    # Handle any leftover content
     if current_chunk:
-        chunks.append({
+        chunk_data = {
             "content": current_chunk,
             "start_line": start_line,
             "end_line": line_num,
             "parent_name": procedure_stack[-1] if procedure_stack else None,
             "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else None)
-        })
+        }
+        chunks.append(calculate_chunk_metadata(chunk_data))
+
+    file_metadata = compute_file_metadata(file_path, "".join(lines), lines, chunks, versions)
 
     return {
-        "metadata": {},
+        "metadata": file_metadata,
         "chunks": chunks
     }
