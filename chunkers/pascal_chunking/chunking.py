@@ -44,6 +44,7 @@ def compute_hashes(chunks):
         hash_full = hash_obj.hexdigest()
         chunk["hash"] = hash_full
         chunk["hashTruncated"] = hash_full[:16]
+
 import re
 import hashlib
 
@@ -54,6 +55,7 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
     start_line = 1
     procedure_stack = []
     comment_cache = []
+    program_name = None  # Initialize program_name variable
 
     def is_procedure_or_function_start(line):
         return re.match(r"^\s*(procedure|function)\s+\w+", line, re.I) is not None
@@ -85,16 +87,16 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
         if not stripped_line:
             continue
 
-        # For a program's main declaration or procedure, we add any preceding comments to the chunk.
-        if re.match(r"^\s*program\s+\w+", stripped_line, re.I) or is_procedure_or_function_start(stripped_line) or (stripped_line == "begin" and not procedure_stack and not current_chunk):
-            # If starting a new procedure or program with content already in the current chunk, create a new chunk.
+        # For a program's main declaration, save its name and add any preceding comments to the chunk.
+        if re.match(r"^\s*program\s+\w+", stripped_line, re.I):
+            program_name = re.search(r"\bprogram\s+(\w+)", stripped_line, re.I).groups()[0]  # Extract and save program name
             if current_chunk:
                 chunk_data = {
                     "content": current_chunk.copy(),
                     "start_line": start_line,
                     "end_line": line_num - len(comment_cache) - 1,
-                    "parent_name": procedure_stack[-1] if procedure_stack else None,
-                    "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else None)
+                    "parent_name": procedure_stack[-1] if procedure_stack else program_name,  # Use program_name for global procedures
+                    "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else program_name)
                 }
                 chunks.append(calculate_chunk_metadata(chunk_data))
                 current_chunk = []
@@ -119,8 +121,8 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
                 "content": current_chunk.copy(),
                 "start_line": start_line,
                 "end_line": line_num,
-                "parent_name": procedure_stack[-1] if procedure_stack else None,
-                "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else None)
+                "parent_name": procedure_stack[-1] if procedure_stack else program_name,  # Use program_name for global procedures
+                "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else program_name)
             }
             chunks.append(calculate_chunk_metadata(chunk_data))
             current_chunk = []
@@ -134,8 +136,8 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
             "content": current_chunk,
             "start_line": start_line,
             "end_line": line_num,
-            "parent_name": procedure_stack[-1] if procedure_stack else None,
-            "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else None)
+            "parent_name": procedure_stack[-1] if procedure_stack else program_name,  # Use program_name for global procedures
+            "parent_hash": get_parent_hash(procedure_stack[-1] if procedure_stack else program_name)
         }
         chunks.append(calculate_chunk_metadata(chunk_data))
 
@@ -145,3 +147,4 @@ def chunk(lines, file_path=None, file_content=None, versions=[]):
         "metadata": file_metadata,
         "chunks": chunks
     }
+
