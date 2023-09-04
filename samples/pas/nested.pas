@@ -18,9 +18,12 @@ var
     innerVar: Integer;
     
     function InnermostFunction(x: Integer): Integer;
+    var
+      retVal: Integer;  (* A local variable to hold the return value *)
     begin
       (* Comment inside a function *)
-      Result := x + outerVar + globalVar;
+      retVal := x + outerVar + globalVar;
+      InnermostFunction := retVal; (* Set the function's return value here *)
     end;
   
   begin { InnerProcedure }
